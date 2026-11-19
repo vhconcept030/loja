@@ -224,6 +224,11 @@ const FOTOS = {"af-nobuck":3,"vans-vr3":2,"oakley-flak":3,"lacoste-tclip":4,"adi
   input,textarea{width:100%;background:#050914;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:12px;font-family:inherit;font-size:.95rem;margin-bottom:8px}
   input:focus,textarea:focus{outline:none;border-color:var(--neon)}
   .err{color:#f87171;font-size:.88rem;min-height:1.2em;margin-top:6px}
+  .frow{display:flex;gap:8px;align-items:center}
+  .frow input{flex:1;min-width:0}
+  .cepmsg{color:var(--muted);font-size:.8rem;white-space:nowrap;margin-bottom:8px}
+  .note{color:var(--muted);font-size:.82rem;margin:2px 0 8px}
+  input.bad{border-color:#f87171}
   .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;padding:12px 22px;border-radius:999px;font-weight:800;transition:transform .3s;z-index:60;box-shadow:0 0 20px var(--glow);white-space:nowrap}
   .toast.show{transform:translateX(-50%) translateY(0)}
   footer{border-top:1px solid var(--line);text-align:center;padding:28px 16px 90px;color:var(--muted);font-size:.88rem}
@@ -291,8 +296,23 @@ const FOTOS = {"af-nobuck":3,"vans-vr3":2,"oakley-flak":3,"lacoste-tclip":4,"adi
       <div class="lbl">Forma de pagamento</div>
       <div class="pays" id="cPays"></div>
       <div class="lbl">Seus dados</div>
-      <input id="cNome" placeholder="Seu nome *">
-      <textarea id="cObs" rows="2" placeholder="Endereço ou observação (opcional)"></textarea>
+      <input id="cNome" placeholder="Nome completo *" autocomplete="name">
+      <input id="cTel" placeholder="Telefone / WhatsApp" inputmode="tel" autocomplete="tel">
+      <div class="lbl">Entrega</div>
+      <div class="pays" id="cEnt">
+        <button class="pay" data-e="Correios" onclick="selEntrega(this)">📦 Enviar pelos Correios</button>
+        <button class="pay" data-e="Retirar / combinar" onclick="selEntrega(this)">🤝 Retirar ou combinar</button>
+      </div>
+      <div id="cEnd" style="display:none;margin-top:10px">
+        <div class="frow"><input id="cCep" placeholder="CEP *" inputmode="numeric" maxlength="9" autocomplete="postal-code" oninput="mascCep(this)"><span class="cepmsg" id="cCepMsg"></span></div>
+        <input id="cRua" placeholder="Rua / Avenida *" autocomplete="address-line1">
+        <div class="frow"><input id="cNum" placeholder="Número *" inputmode="numeric"><input id="cComp" placeholder="Complemento"></div>
+        <input id="cBairro" placeholder="Bairro *">
+        <div class="frow"><input id="cCidade" placeholder="Cidade *" autocomplete="address-level2"><input id="cUf" placeholder="UF *" maxlength="2" style="max-width:80px;text-transform:uppercase"></div>
+        <input id="cCpf" placeholder="CPF (para a etiqueta dos Correios)" inputmode="numeric" maxlength="14" oninput="mascCpf(this)">
+        <div class="note">O valor do frete é combinado pelo WhatsApp.</div>
+      </div>
+      <textarea id="cObs" rows="2" placeholder="Observação (opcional)"></textarea>
       <div class="err" id="cErr"></div>
       <button class="primary wa" onclick="enviar()">Enviar pedido pelo WhatsApp</button>
     </div>
@@ -419,17 +439,62 @@ function abrirSacola(){
 function remover(i){ sacola.splice(i,1); $("count").textContent = sacola.length; abrirSacola(); }
 function fechar(id){ $(id).classList.remove("show"); }
 
+let entSel = null;
+function selEntrega(el){
+  entSel = el.dataset.e;
+  document.querySelectorAll("#cEnt .pay").forEach(b=>b.classList.toggle("on", b===el));
+  $("cEnd").style.display = entSel === "Correios" ? "block" : "none";
+}
+function mascCpf(el){
+  let v = el.value.replace(/\D/g,"").slice(0,11);
+  v = v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");
+  el.value = v;
+}
+function mascCep(el){
+  let v = el.value.replace(/\D/g,"").slice(0,8);
+  el.value = v.length > 5 ? v.slice(0,5)+"-"+v.slice(5) : v;
+  if (v.length === 8) buscarCep(v);
+}
+async function buscarCep(cep){
+  $("cCepMsg").textContent = "buscando...";
+  try{
+    const r = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+    const d = await r.json();
+    if (d.erro) { $("cCepMsg").textContent = "CEP não encontrado"; return; }
+    if (d.logradouro) $("cRua").value = d.logradouro;
+    if (d.bairro) $("cBairro").value = d.bairro;
+    $("cCidade").value = d.localidade || ""; $("cUf").value = d.uf || "";
+    $("cCepMsg").textContent = "✓ endereço encontrado";
+    ($("cRua").value ? $("cNum") : $("cRua")).focus();
+  }catch(e){ $("cCepMsg").textContent = "preencha manualmente"; }
+}
+const val = id => $(id).value.trim();
+
 function enviar(){
-  const nome = $("cNome").value.trim(), obs = $("cObs").value.trim();
-  if(!pagSel){ $("cErr").textContent = "Escolha a forma de pagamento."; return; }
-  if(!nome){ $("cErr").textContent = "Digite seu nome."; $("cNome").focus(); return; }
-  let msg = `*NOVO PEDIDO - ${LOJA.nome}*\n\n*Cliente:* ${nome}\n\n`;
+  const nome = val("cNome"), obs = val("cObs"), tel = val("cTel");
+  document.querySelectorAll("#cFinal input").forEach(i=>i.classList.remove("bad"));
+  const erro = (m,id) => { $("cErr").textContent = m; if(id){ $(id).classList.add("bad"); $(id).focus(); } };
+  if(!pagSel) return erro("Escolha a forma de pagamento.");
+  if(!nome) return erro("Digite seu nome.","cNome");
+  if(!entSel) return erro("Escolha como quer receber.");
+  let endereco = "";
+  if (entSel === "Correios") {
+    for (const [id,n] of [["cCep","o CEP"],["cRua","a rua"],["cNum","o número"],["cBairro","o bairro"],["cCidade","a cidade"],["cUf","a UF"]])
+      if (!val(id)) return erro(`Preencha ${n}.`, id);
+    if (val("cCep").replace(/\D/g,"").length !== 8) return erro("CEP inválido.","cCep");
+    endereco = `${val("cRua")}, ${val("cNum")}${val("cComp") ? " - "+val("cComp") : ""}\n${val("cBairro")} - ${val("cCidade")}/${val("cUf").toUpperCase()}\nCEP: ${val("cCep")}`;
+  }
+  $("cErr").textContent = "";
+  let msg = `*NOVO PEDIDO - ${LOJA.nome}*\n\n*Cliente:* ${nome}${tel ? "\n*Telefone:* "+tel : ""}${val("cCpf") ? "\n*CPF:* "+val("cCpf") : ""}\n\n`;
   sacola.forEach((s,i)=>{ msg += `${i+1}. ${s.nome}${s.cor ? " - "+s.cor : ""}\n   Código: ${s.cod || "-"}\n   Numeração: ${s.num} | ${brl(s.preco)}\n${s.link ? "   Foto: "+s.link+"\n" : ""}`; });
   msg += `\n*Total:* ${brl(sacola.reduce((a,s)=>a+s.preco,0))}\n*Pagamento:* ${pagSel}`;
+  msg += `\n*Entrega:* ${entSel}`;
+  if (endereco) msg += `\n*Endereço:*\n${endereco}\n_(frete a combinar)_`;
   if(obs) msg += `\n*Obs:* ${obs}`;
   window.open(`https://wa.me/${LOJA.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
 }
 
+document.addEventListener("input", e => { if (e.target.classList.contains("bad")) { e.target.classList.remove("bad"); $("cErr").textContent = ""; } });
 desenharFiltros(); desenharGrade();
 </script>
 </body>
