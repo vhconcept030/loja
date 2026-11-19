@@ -13,21 +13,110 @@
 const LOJA = {
   nome: "VH CONCEPT",
   slogan: "Os tênis mais brabos, direto pro seu pé",
-  logo: "logo.png",                      // Suba a logo no GitHub com esse nome: logo.png
-  whatsapp: "5518999999999",             // 55 + DDD + número, só números
-  cidade: "Dracena - SP",
+  logo: "logo.png",
+  whatsapp: "5518996728098",             // 55 + DDD + número, só números
+  cidade: "",
   pagamentos: ["Pix", "Cartão de crédito", "Cartão de débito", "Dinheiro"]
 };
 
-/* Cada tênis: nome, marca, preco, foto (link ou arquivo), numeracoes disponíveis.
-   Para tirar um número de estoque, é só apagar ele da lista. */
+// Grades de numeração
+const r = (a,b) => Array.from({length:b-a+1},(_,i)=>a+i);
+const BAIXA = r(34,39), ALTA = r(38,43), ALTA39 = r(39,43), TUDO = r(34,43), TUDO38 = r(34,43);
+
+/* Cada tênis: nome, marca, preço, numerações e (opcional) cores.
+   Foto: coloque o arquivo na pasta "fotos" com o código do produto, ex: fotos/air-force-nobuck.jpg
+   Cores (opcional): cores: [{nome:"Preto", hex:"#111", foto:"fotos/x-preto.jpg", numeracoes:[38,39]}] */
 const PRODUTOS = [
-  { nome: "Modelo Exemplo 1", marca: "Marca A", preco: 399.90, foto: "", numeracoes: [37,38,39,40,41,42,43] },
-  { nome: "Modelo Exemplo 2", marca: "Marca B", preco: 289.90, foto: "", numeracoes: [34,35,36,37,38,39] },
-  { nome: "Modelo Exemplo 3", marca: "Marca C", preco: 349.90, foto: "", numeracoes: [38,39,40,41,42] },
-  { nome: "Modelo Exemplo 4", marca: "Marca A", preco: 459.90, foto: "", numeracoes: [39,40,41,42,43,44] },
-  { nome: "Modelo Exemplo 5", marca: "Marca D", preco: 199.90, foto: "", numeracoes: [33,34,35,36,37,38,39,40] },
-  { nome: "Modelo Exemplo 6", marca: "Marca B", preco: 529.90, foto: "", numeracoes: [40,41,42,43] }
+  // ---------- IMPORTADOS / LUXO ----------
+  { id:"lv-skate",          nome:"Louis Vuitton Skate 1ª Linha (na caixa)", marca:"Louis Vuitton", preco:400, numeracoes:TUDO, destaque:true },
+  { id:"lv-tenis",          nome:"Tênis Louis Vuitton",          marca:"Louis Vuitton", preco:400, numeracoes:TUDO, destaque:true },
+  { id:"lv-classico",       nome:"Louis Vuitton",                marca:"Louis Vuitton", preco:250, numeracoes:TUDO },
+  { id:"lv-collab",         nome:"LV Collab Linha Premium",      marca:"Louis Vuitton", preco:190, numeracoes:BAIXA },
+  { id:"gucci",             nome:"Gucci Importado",              marca:"Gucci",         preco:400, numeracoes:TUDO, destaque:true },
+  { id:"balmain",           nome:"Balmain Importado",            marca:"Balmain",       preco:400, numeracoes:TUDO, destaque:true },
+  { id:"mcqueen-importado", nome:"Alexander McQueen Importado",  marca:"Alexander McQueen", preco:400, numeracoes:ALTA39, destaque:true },
+  { id:"mcqueen",           nome:"Tênis Alexander McQueen",      marca:"Alexander McQueen", preco:190, numeracoes:ALTA },
+  { id:"miu-miu",           nome:"Miu Miu",                      marca:"Miu Miu",       preco:190, numeracoes:BAIXA },
+  { id:"hugo-boss",         nome:"Hugo Boss (palmilha)",         marca:"Hugo Boss",     preco:190, numeracoes:ALTA39 },
+  { id:"tn-importado",      nome:"Nike TN Importado",            marca:"Nike",          preco:400, numeracoes:TUDO, destaque:true },
+  { id:"asics-importado",   nome:"Asics Importado",              marca:"Asics",         preco:400, numeracoes:ALTA, destaque:true },
+  { id:"nb-9060-importado", nome:"New Balance 9060 Importado",   marca:"New Balance",   preco:400, numeracoes:ALTA, destaque:true },
+  { id:"samba-importado",   nome:"Adidas Samba Importado",       marca:"Adidas",        preco:350, numeracoes:BAIXA, destaque:true },
+
+  // ---------- NIKE ----------
+  { id:"af-nobuck",         nome:"Air Force Nobuck 1ª Linha",    marca:"Nike", preco:190, numeracoes:ALTA },
+  { id:"af-nobuck-premium", nome:"Air Force Nobuck Premium",     marca:"Nike", preco:190, numeracoes:[40,41,42,43] },
+  { id:"af-premium",        nome:"Air Force Linha Premium",      marca:"Nike", preco:190, numeracoes:BAIXA },
+  { id:"af-primeira",       nome:"Air Force Primeira Linha",     marca:"Nike", preco:190, numeracoes:ALTA },
+  { id:"af-one",            nome:"Nike Air Force One",           marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"af-lancamento",     nome:"Air Force One Lançamento",     marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"af-especial",       nome:"Air Force One Numeração Especial", marca:"Nike", preco:200, numeracoes:[44,45,46,47] },
+  { id:"tn-luxo",           nome:"Nike TN Luxo",                 marca:"Nike", preco:190, numeracoes:ALTA },
+  { id:"tn-especial",       nome:"Nike Air TN Numeração Especial", marca:"Nike", preco:190, numeracoes:[44,45,46] },
+  { id:"vomero-18",         nome:"Nike Vomero 18 Plus",          marca:"Nike", preco:190, numeracoes:ALTA },
+  { id:"vomero-premium",    nome:"Nike Vomero Premium",          marca:"Nike", preco:190, numeracoes:ALTA },
+  { id:"sb-plataforma",     nome:"Nike SB Plataforma",           marca:"Nike", preco:190, numeracoes:BAIXA },
+  { id:"sb-borough",        nome:"Nike SB Borough 1ª Linha",     marca:"Nike", preco:190, numeracoes:ALTA },
+  { id:"court-borough",     nome:"Nike Court Borough",           marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"zoom",              nome:"Nike Zoom X",                  marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"dunk",              nome:"Nike Dunk Low",                marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"dunk-luxo",         nome:"Nike Dunk Luxo",               marca:"Nike", preco:190, numeracoes:BAIXA },
+  { id:"dunk-glitter",      nome:"Nike Dunk Glitter",            marca:"Nike", preco:190, numeracoes:BAIXA },
+  { id:"twist",             nome:"Nike Twist",                   marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"shox",              nome:"Nike Shox",                    marca:"Nike", preco:190, numeracoes:TUDO },
+  { id:"jordan-4",          nome:"Nike Jordan 4",                marca:"Nike", preco:200, numeracoes:TUDO },
+  { id:"air-jordan",        nome:"Nike Air Jordan",              marca:"Nike", preco:190, numeracoes:ALTA39 },
+  { id:"air-max-tl",        nome:"Nike Air Max TL Lançamento",   marca:"Nike", preco:190, numeracoes:ALTA39 },
+  { id:"air-max-excee",     nome:"Nike Air Max Excee",           marca:"Nike", preco:190, numeracoes:ALTA },
+
+  // ---------- ADIDAS ----------
+  { id:"samba-luxo",        nome:"Adidas Samba Linha Luxo",      marca:"Adidas", preco:200, numeracoes:BAIXA },
+  { id:"adizero-evo",       nome:"Adidas Adizero Evo SL",        marca:"Adidas", preco:190, numeracoes:ALTA },
+  { id:"adizero",           nome:"Adidas Adizero",               marca:"Adidas", preco:190, numeracoes:BAIXA },
+  { id:"ultraboost",        nome:"Adidas Ultraboost",            marca:"Adidas", preco:190, numeracoes:BAIXA },
+  { id:"slip-on",           nome:"Adidas Slip On",               marca:"Adidas", preco:190, numeracoes:BAIXA },
+  { id:"superstar",         nome:"Adidas Superstar",             marca:"Adidas", preco:190, numeracoes:BAIXA },
+  { id:"rivalry",           nome:"Adidas Rivalry Low",           marca:"Adidas", preco:190, numeracoes:TUDO },
+  { id:"campus",            nome:"Adidas Campus",                marca:"Adidas", preco:190, numeracoes:TUDO },
+  { id:"gazelle",           nome:"Adidas Gazelle",               marca:"Adidas", preco:190, numeracoes:BAIXA },
+
+  // ---------- NEW BALANCE ----------
+  { id:"nb-9060",           nome:"New Balance 9060 1ª Linha",    marca:"New Balance", preco:190, numeracoes:TUDO },
+  { id:"nb-9060-r",         nome:"New Balance 9060 R",           marca:"New Balance", preco:190, numeracoes:ALTA },
+  { id:"nb-1080",           nome:"New Balance 1080",             marca:"New Balance", preco:190, numeracoes:TUDO },
+  { id:"nb-740",            nome:"New Balance 740 Abzorb",       marca:"New Balance", preco:190, numeracoes:BAIXA },
+  { id:"nb-running",        nome:"New Balance Running",          marca:"New Balance", preco:190, numeracoes:BAIXA },
+  { id:"nb-casual",         nome:"New Balance",                  marca:"New Balance", preco:190, numeracoes:BAIXA },
+
+  // ---------- VANS ----------
+  { id:"vans-vr3",          nome:"Vans Ultra VR3",               marca:"Vans", preco:190, numeracoes:TUDO },
+  { id:"vans-vr3-neo",      nome:"Vans VR3 Neo",                 marca:"Vans", preco:190, numeracoes:TUDO },
+  { id:"vans-old-skool",    nome:"Vans Old Skool (saquinho)",    marca:"Vans", preco:190, numeracoes:TUDO },
+  { id:"vans-knu",          nome:"Vans Knu",                     marca:"Vans", preco:190, numeracoes:TUDO },
+  { id:"vans-eva",          nome:"Vans Eva Primeira Linha",      marca:"Vans", preco:190, numeracoes:BAIXA },
+
+  // ---------- PUMA ----------
+  { id:"puma-180",          nome:"Puma 180",                     marca:"Puma", preco:190, numeracoes:TUDO },
+  { id:"puma-velcro",       nome:"Puma Velcro Plataforma (na caixa)", marca:"Puma", preco:190, numeracoes:BAIXA },
+  { id:"puma-park",         nome:"Puma Park",                    marca:"Puma", preco:190, numeracoes:BAIXA },
+  { id:"puma-motorsport",   nome:"Puma Ferrari / Mercedes / BMW", marca:"Puma", preco:190, numeracoes:ALTA },
+
+  // ---------- OUTRAS MARCAS ----------
+  { id:"lacoste-tclip",     nome:"Lacoste T-Clip Sapatênis",     marca:"Lacoste", preco:190, numeracoes:ALTA },
+  { id:"lacoste-europa",    nome:"Lacoste Europa",               marca:"Lacoste", preco:190, numeracoes:ALTA },
+  { id:"oakley-flak",       nome:"Oakley Flak Linha Premium",    marca:"Oakley", preco:190, numeracoes:TUDO },
+  { id:"oakley-halftrack",  nome:"Bota Oakley Halftrack",        marca:"Oakley", preco:190, numeracoes:ALTA },
+  { id:"on-cloud",          nome:"On Cloud",                     marca:"On", preco:190, numeracoes:BAIXA },
+  { id:"mizuno-space",      nome:"Mizuno Space 3",               marca:"Mizuno", preco:190, numeracoes:ALTA39 },
+  { id:"ous-fluente",       nome:"Ous Fluente GTX",              marca:"Ous", preco:190, numeracoes:ALTA },
+  { id:"ous-refletivo",     nome:"Ous Refletivo",                marca:"Ous", preco:190, numeracoes:ALTA },
+  { id:"tesla",             nome:"Tesla",                        marca:"Tesla", preco:190, numeracoes:TUDO },
+  { id:"tesla-laminante",   nome:"Tesla Laminante",              marca:"Tesla", preco:190, numeracoes:ALTA },
+  { id:"all-star",          nome:"All Star (palmilha em gel)",   marca:"All Star", preco:190, numeracoes:BAIXA },
+  { id:"cavarela",          nome:"Cavarela Numeração Especial",  marca:"Cavarela", preco:200, numeracoes:[44,45,46] },
+
+  // ---------- INFANTIL ----------
+  { id:"infantil",          nome:"Linha Infantil",               marca:"Infantil", preco:120, numeracoes:["Consultar"] }
 ];
 /* ========================================================= */
 </script>
@@ -43,69 +132,78 @@ const PRODUTOS = [
   html{scroll-behavior:smooth}
   body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.5;overflow-x:hidden}
   body::before{content:"";position:fixed;inset:0;z-index:-1;
-    background:
-      radial-gradient(ellipse 60% 40% at 50% 0%,rgba(31,107,255,.25),transparent 70%),
+    background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(31,107,255,.25),transparent 70%),
       radial-gradient(ellipse 40% 30% at 100% 60%,rgba(31,107,255,.12),transparent 70%),
       radial-gradient(ellipse 40% 30% at 0% 90%,rgba(31,107,255,.12),transparent 70%);}
   button{font-family:inherit;cursor:pointer}
   .chrome{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;
     filter:drop-shadow(0 0 1px #000) drop-shadow(0 3px 0 #0b1a4a) drop-shadow(0 0 18px var(--glow))}
-
-  /* Cabeçalho */
-  header{position:sticky;top:0;z-index:20;background:rgba(3,5,12,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 20px rgba(31,107,255,.15)}
-  .bar{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
-  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
-  .brand img{height:46px;width:46px;border-radius:50%;object-fit:cover;border:2px solid var(--neon);box-shadow:0 0 14px var(--glow)}
-  .brand span{font-family:"Russo One",sans-serif;font-size:1.3rem;font-style:italic;letter-spacing:1px}
-  .cart-btn{background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:800;display:flex;gap:8px;align-items:center;box-shadow:0 0 18px var(--glow)}
+  header{position:sticky;top:0;z-index:20;background:rgba(3,5,12,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 20px rgba(31,107,255,.15)}
+  .bar{max-width:1200px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;gap:10px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none;min-width:0}
+  .brand img{height:44px;width:44px;border-radius:50%;object-fit:cover;border:2px solid var(--neon);box-shadow:0 0 14px var(--glow)}
+  .brand span{font-family:"Russo One",sans-serif;font-size:1.25rem;font-style:italic;letter-spacing:1px;white-space:nowrap}
+  .cart-btn{background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:800;display:flex;gap:8px;align-items:center;box-shadow:0 0 18px var(--glow);flex-shrink:0}
   .badge{background:#fff;color:var(--blue);border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.8rem}
-
-  /* Hero */
-  .hero{position:relative;max-width:1150px;margin:auto;padding:40px 16px 30px;text-align:center}
-  .logo-ring{position:relative;width:min(300px,72vw);aspect-ratio:1;margin:0 auto 10px;border-radius:50%;
-    padding:6px;background:conic-gradient(from 0deg,var(--neon),#0b1a4a,#cfd6e4,#0b1a4a,var(--neon));
+  .hero{position:relative;max-width:1200px;margin:auto;padding:36px 16px 24px;text-align:center;overflow:hidden}
+  .logo-ring{width:min(280px,68vw);aspect-ratio:1;margin:0 auto 10px;border-radius:50%;padding:6px;
+    background:conic-gradient(from 0deg,var(--neon),#0b1a4a,#cfd6e4,#0b1a4a,var(--neon));
     box-shadow:0 0 40px var(--glow),0 0 90px rgba(31,107,255,.35);animation:pulse 3s ease-in-out infinite}
   .logo-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#000}
   @keyframes pulse{50%{box-shadow:0 0 60px var(--glow),0 0 120px rgba(31,107,255,.5)}}
   .streak{position:absolute;height:3px;width:40%;background:linear-gradient(90deg,transparent,var(--neon),transparent);filter:drop-shadow(0 0 6px var(--neon));transform:skewY(-18deg)}
   .s1{top:28%;left:-5%}.s2{top:58%;right:-5%}
-  .crown{width:64px;margin:0 auto -6px;display:block;filter:drop-shadow(0 0 10px var(--glow))}
-  .hero h1{font-family:"Russo One",sans-serif;font-style:italic;font-size:clamp(2.6rem,10vw,5.5rem);line-height:.95;text-transform:uppercase;letter-spacing:2px}
+  .crown{width:60px;margin:0 auto -6px;display:block;filter:drop-shadow(0 0 10px var(--glow))}
+  .hero h1{font-family:"Russo One",sans-serif;font-style:italic;font-size:clamp(2.6rem,10vw,5.2rem);line-height:.95;text-transform:uppercase;letter-spacing:2px}
   .hero h1 small{display:block;font-size:.55em;letter-spacing:4px}
-  .hero p{color:var(--muted);margin-top:14px;font-size:1.05rem}
-  .cta{display:inline-block;margin-top:22px;background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;text-decoration:none;font-weight:800;padding:14px 30px;border-radius:999px;box-shadow:0 0 24px var(--glow);text-transform:uppercase;letter-spacing:1px}
-  .perks{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+  .hero p{color:var(--muted);margin-top:12px;font-size:1.05rem}
+  .cta{display:inline-block;margin-top:20px;background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;text-decoration:none;font-weight:800;padding:14px 30px;border-radius:999px;box-shadow:0 0 24px var(--glow);text-transform:uppercase;letter-spacing:1px}
+  .perks{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
   .perks div{border:1px solid var(--line);background:rgba(13,21,48,.6);border-radius:999px;padding:7px 14px;font-size:.88rem;color:#c7d1f0}
-
-  /* Vitrine */
-  .title{max-width:1150px;margin:20px auto 14px;padding:0 16px;font-family:"Russo One",sans-serif;font-style:italic;font-size:1.7rem;text-transform:uppercase}
-  .filters{max-width:1150px;margin:auto;padding:0 16px 18px;display:flex;gap:8px;overflow-x:auto}
-  .chip{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 16px;white-space:nowrap;font-weight:600}
+  .title{max-width:1200px;margin:18px auto 12px;padding:0 16px;font-family:"Russo One",sans-serif;font-style:italic;font-size:1.7rem;text-transform:uppercase}
+  .tools{max-width:1200px;margin:auto;padding:0 16px 12px;display:flex;flex-direction:column;gap:10px}
+  .search{width:100%;background:#050914;border:1.5px solid var(--line);color:var(--text);border-radius:12px;padding:13px 14px;font-size:1rem;font-family:inherit}
+  .search:focus{outline:none;border-color:var(--neon);box-shadow:0 0 10px var(--glow)}
+  .row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .row::-webkit-scrollbar{display:none}
+  .chip{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 15px;white-space:nowrap;font-weight:600;font-size:.9rem}
   .chip.on{background:linear-gradient(180deg,var(--neon),var(--blue));border-color:var(--neon);box-shadow:0 0 12px var(--glow)}
-  .grid{max-width:1150px;margin:auto;padding:0 16px 70px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
-  .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s}
+  .count{color:var(--muted);font-size:.85rem}
+  .grid{max-width:1200px;margin:auto;padding:4px 16px 70px;display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:14px}
+  @media(min-width:700px){.grid{grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px}}
+  .card{position:relative;background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s;cursor:pointer}
   .card:hover{transform:translateY(-5px);border-color:var(--neon);box-shadow:0 0 26px rgba(31,107,255,.4)}
+  .tag{position:absolute;top:10px;left:10px;z-index:2;background:var(--chrome);color:#06102a;font-size:.68rem;font-weight:800;padding:4px 9px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px}
   .ph{aspect-ratio:1/1;background:radial-gradient(circle at 50% 65%,rgba(31,107,255,.35),#050914 70%);display:grid;place-items:center;overflow:hidden}
   .ph img{width:100%;height:100%;object-fit:cover}
-  .ph .emoji{font-size:5rem;filter:drop-shadow(0 0 18px var(--neon));transform:rotate(-14deg)}
-  .info{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .marca{color:var(--neon);font-size:.78rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
-  .nome{font-weight:800;font-size:1.08rem}
-  .preco{font-family:"Russo One",sans-serif;font-size:1.4rem}
-  .nums{color:var(--muted);font-size:.82rem}
-  .card button{margin-top:auto;background:var(--chrome);color:#06102a;border:0;border-radius:12px;padding:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
-  .card button:hover{background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff}
-
-  /* Modais */
+  .emoji{font-size:4.2rem;filter:drop-shadow(0 0 18px var(--neon));transform:rotate(-14deg)}
+  .info{padding:12px 14px 14px;display:flex;flex-direction:column;gap:4px;flex:1}
+  .marca{color:var(--neon);font-size:.72rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+  .nome{font-weight:800;font-size:.98rem;line-height:1.25}
+  .preco{font-family:"Russo One",sans-serif;font-size:1.3rem;margin-top:2px}
+  .nums{color:var(--muted);font-size:.78rem}
+  .dots{display:flex;gap:6px;flex-wrap:wrap;margin-top:2px}
+  .dot{width:16px;height:16px;border-radius:50%;border:2px solid #2a3561}
+  .go{margin-top:auto;background:var(--chrome);color:#06102a;border:0;border-radius:10px;padding:10px;font-weight:800;text-transform:uppercase;font-size:.8rem;letter-spacing:.5px}
+  .card:hover .go{background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff}
+  .empty{color:var(--muted);text-align:center;padding:30px 0;grid-column:1/-1}
   .ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;z-index:50;align-items:flex-end;justify-content:center}
   .ov.show{display:flex}
-  .sheet{background:linear-gradient(180deg,var(--card2),var(--card));width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:22px 18px 26px;border:1px solid var(--neon);box-shadow:0 0 40px rgba(31,107,255,.35)}
+  .sheet{background:linear-gradient(180deg,var(--card2),var(--card));width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:20px 18px 26px;border:1px solid var(--neon);box-shadow:0 0 40px rgba(31,107,255,.35)}
   @media(min-width:640px){.ov{align-items:center}.sheet{border-radius:22px}}
-  .sheet h2{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.4rem;margin-bottom:4px}
-  .close{float:right;background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1}
-  .lbl{font-weight:700;margin:18px 0 8px;font-size:.95rem}
+  .sheet h2{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.35rem;margin-bottom:2px}
+  .close{float:right;background:none;border:0;color:var(--muted);font-size:1.8rem;line-height:1}
+  .mph{aspect-ratio:4/3;border-radius:16px;margin:12px 0 8px;background:radial-gradient(circle at 50% 65%,rgba(31,107,255,.35),#050914 70%);display:grid;place-items:center;overflow:hidden;border:1px solid var(--line)}
+  .mph img{width:100%;height:100%;object-fit:cover}
+  .mph .emoji{font-size:6rem}
+  .lbl{font-weight:700;margin:16px 0 8px;font-size:.95rem}
+  .swatches{display:flex;gap:8px;flex-wrap:wrap}
+  .sw{display:flex;align-items:center;gap:8px;background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:999px;padding:5px 13px 5px 5px;font-weight:600;font-size:.86rem}
+  .sw i{width:24px;height:24px;border-radius:50%;border:1px solid #3a4570;display:block}
+  .sw.on{border-color:var(--neon);background:rgba(31,107,255,.18);box-shadow:0 0 10px var(--glow)}
   .sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px}
   .size{background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:11px 0;font-weight:800}
+  .size.wide{grid-column:1/-1}
   .size.on{background:linear-gradient(180deg,var(--neon),var(--blue));border-color:var(--neon);box-shadow:0 0 12px var(--glow)}
   .primary{width:100%;margin-top:20px;background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:1rem;text-transform:uppercase;box-shadow:0 0 18px var(--glow)}
   .primary:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
@@ -119,8 +217,8 @@ const PRODUTOS = [
   .pay.on{border-color:var(--neon);background:rgba(31,107,255,.18);box-shadow:0 0 10px var(--glow)}
   input,textarea{width:100%;background:#050914;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:12px;font-family:inherit;font-size:.95rem;margin-bottom:8px}
   input:focus,textarea:focus{outline:none;border-color:var(--neon)}
-  .empty{color:var(--muted);text-align:center;padding:30px 0}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;padding:12px 22px;border-radius:999px;font-weight:800;transition:transform .3s;z-index:60;box-shadow:0 0 20px var(--glow)}
+  .err{color:#f87171;font-size:.88rem;min-height:1.2em;margin-top:6px}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;padding:12px 22px;border-radius:999px;font-weight:800;transition:transform .3s;z-index:60;box-shadow:0 0 20px var(--glow);white-space:nowrap}
   .toast.show{transform:translateX(-50%) translateY(0)}
   footer{border-top:1px solid var(--line);text-align:center;padding:28px 16px 90px;color:var(--muted);font-size:.88rem}
   footer strong{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.2rem}
@@ -152,26 +250,31 @@ const PRODUTOS = [
 </section>
 
 <h2 class="title chrome" id="vitrine">Modelos</h2>
-<div class="filters" id="filters"></div>
+<div class="tools">
+  <input class="search" id="busca" placeholder="🔎 Buscar modelo... (ex: Air Force, Dunk, 9060)" oninput="desenharGrade()">
+  <div class="row" id="filters"></div>
+  <div class="row" id="grades"></div>
+  <div class="count" id="qtd"></div>
+</div>
 <main class="grid" id="grid"></main>
 
 <footer id="footer"></footer>
 <a class="fab" id="fab" target="_blank" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.6-.3z"/></svg></a>
 
-<!-- Modal: escolher numeração -->
 <div class="ov" id="ovProd" onclick="if(event.target===this)fechar('ovProd')">
   <div class="sheet">
     <button class="close" onclick="fechar('ovProd')">×</button>
     <div class="marca" id="mMarca"></div>
     <h2 id="mNome"></h2>
     <div class="preco chrome" id="mPreco"></div>
+    <div class="mph" id="mFoto"></div>
+    <div id="mCoresBox"><div class="lbl">Escolha a cor</div><div class="swatches" id="mCores"></div></div>
     <div class="lbl">Escolha a numeração</div>
     <div class="sizes" id="mSizes"></div>
     <button class="primary" id="mAdd" disabled onclick="adicionar()">Adicionar à sacola</button>
   </div>
 </div>
 
-<!-- Modal: sacola e finalização -->
 <div class="ov" id="ovCart" onclick="if(event.target===this)fechar('ovCart')">
   <div class="sheet">
     <button class="close" onclick="fechar('ovCart')">×</button>
@@ -184,6 +287,7 @@ const PRODUTOS = [
       <div class="lbl">Seus dados</div>
       <input id="cNome" placeholder="Seu nome *">
       <textarea id="cObs" rows="2" placeholder="Endereço ou observação (opcional)"></textarea>
+      <div class="err" id="cErr"></div>
       <button class="primary wa" onclick="enviar()">Enviar pedido pelo WhatsApp</button>
     </div>
   </div>
@@ -193,56 +297,85 @@ const PRODUTOS = [
 
 <script>
 const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-let sacola = [], atual = null, numSel = null, pagSel = null, filtro = "Todos";
 const $ = id => document.getElementById(id);
+let sacola = [], atual = null, corSel = 0, numSel = null, pagSel = null, filtro = "Todos", gradeF = "Todas";
 
-// Marca, logo e textos
+// Cada produto tem pelo menos uma "cor"; foto padrão = fotos/<id>.jpg
+PRODUTOS.forEach(p => {
+  if (!p.cores || !p.cores.length) p.cores = [{ nome:"", foto: p.foto || `fotos/${p.id}.jpg`, numeracoes: p.numeracoes }];
+  p.cores.forEach(c => { if (!c.numeracoes) c.numeracoes = p.numeracoes; });
+  p.todasNums = [...new Set(p.cores.flatMap(c => c.numeracoes))];
+});
+
+const fotoHTML = (src, alt) => src ? `<img src="${src}" alt="${alt}" loading="lazy" onerror="this.outerHTML='<span class=emoji>👟</span>'">` : `<span class="emoji">👟</span>`;
+const faixa = n => { const nn = n.filter(x => typeof x === "number"); return nn.length ? (nn.length > 2 ? `${Math.min(...nn)} ao ${Math.max(...nn)}` : nn.join(" e ")) : "Consultar"; };
+
+// Marca e textos
 document.title = LOJA.nome;
 const partes = LOJA.nome.split(" ");
 $("heroNome").innerHTML = partes.length > 1 ? `${partes[0]}<small>${partes.slice(1).join(" ")}</small>` : LOJA.nome;
 $("slogan").textContent = LOJA.slogan;
-$("footer").innerHTML = `<strong class="chrome">${LOJA.nome}</strong><br>${LOJA.cidade}`;
+$("footer").innerHTML = `<strong class="chrome">${LOJA.nome}</strong>${LOJA.cidade ? "<br>"+LOJA.cidade : ""}`;
 $("fab").href = `https://wa.me/${LOJA.whatsapp}`;
-
 const nomeTexto = `<span class="chrome">${LOJA.nome}</span>`;
-if (LOJA.logo) {
-  $("brand").innerHTML = `<img src="${LOJA.logo}" alt="${LOJA.nome}" onerror="this.remove()">${nomeTexto}`;
-  $("logoBig").src = LOJA.logo; $("logoBig").alt = LOJA.nome;
-  $("logoBig").onerror = () => $("logoRing").style.display = "none";
-} else {
-  $("brand").innerHTML = nomeTexto; $("logoRing").style.display = "none";
-}
+$("brand").innerHTML = `<img src="${LOJA.logo}" alt="" onerror="this.remove()">${nomeTexto}`;
+$("logoBig").src = LOJA.logo; $("logoBig").alt = LOJA.nome;
+$("logoBig").onerror = () => $("logoRing").style.display = "none";
 
 function desenharFiltros(){
-  const marcas = ["Todos", ...new Set(PRODUTOS.map(p=>p.marca))];
-  $("filters").innerHTML = marcas.map(m =>
-    `<button class="chip ${m===filtro?'on':''}" onclick="filtro='${m}';desenharFiltros();desenharGrade()">${m}</button>`).join("");
+  const marcas = ["Todos", "Importados", ...[...new Set(PRODUTOS.map(p=>p.marca))].sort((a,b)=>{
+    const ca = PRODUTOS.filter(p=>p.marca===a).length, cb = PRODUTOS.filter(p=>p.marca===b).length; return cb-ca || a.localeCompare(b);
+  })];
+  $("filters").innerHTML = marcas.map(m => `<button class="chip ${m===filtro?'on':''}" onclick="filtro='${m}';desenharFiltros();desenharGrade()">${m}</button>`).join("");
+  const gs = ["Todas","Masculino (38–43)","Feminino (34–39)","Especial (44+)"];
+  $("grades").innerHTML = gs.map(g => `<button class="chip ${g===gradeF?'on':''}" onclick="gradeF='${g}';desenharFiltros();desenharGrade()">${g}</button>`).join("");
+}
+
+function passa(p){
+  if (filtro === "Importados" && !p.destaque) return false;
+  if (filtro !== "Todos" && filtro !== "Importados" && p.marca !== filtro) return false;
+  const n = p.todasNums;
+  if (gradeF.startsWith("Masc") && !n.some(x => x >= 40 && x <= 43)) return false;
+  if (gradeF.startsWith("Fem")  && !n.some(x => x >= 34 && x <= 37)) return false;
+  if (gradeF.startsWith("Esp")  && !n.some(x => x >= 44)) return false;
+  const q = $("busca").value.trim().toLowerCase();
+  if (q && !(p.nome + " " + p.marca).toLowerCase().includes(q)) return false;
+  return true;
 }
 
 function desenharGrade(){
-  const lista = PRODUTOS.map((p,i)=>({...p,i})).filter(p=>filtro==="Todos"||p.marca===filtro);
-  $("grid").innerHTML = lista.map(p => `
-    <article class="card">
-      <div class="ph">${p.foto ? `<img src="${p.foto}" alt="${p.nome}" loading="lazy">` : `<span class="emoji">👟</span>`}</div>
+  const lista = PRODUTOS.map((p,i)=>({p,i})).filter(o => passa(o.p));
+  $("qtd").textContent = `${lista.length} modelo${lista.length===1?"":"s"}`;
+  $("grid").innerHTML = lista.length ? lista.map(({p,i}) => `
+    <article class="card" onclick="abrirProduto(${i})">
+      ${p.destaque ? '<span class="tag">Importado</span>' : ''}
+      <div class="ph">${fotoHTML(p.cores[0].foto, p.nome)}</div>
       <div class="info">
         <div class="marca">${p.marca}</div>
         <div class="nome">${p.nome}</div>
         <div class="preco chrome">${brl(p.preco)}</div>
-        <div class="nums">Numeração: ${p.numeracoes[0]} ao ${p.numeracoes[p.numeracoes.length-1]}</div>
-        <button onclick="abrirProduto(${p.i})">Escolher numeração</button>
+        ${p.cores.length > 1 ? `<div class="dots">${p.cores.map(c=>`<span class="dot" style="background:${c.hex||'#555'}" title="${c.nome}"></span>`).join("")}</div>` : ""}
+        <div class="nums">Numeração: ${faixa(p.todasNums)}</div>
+        <button class="go">Escolher</button>
       </div>
-    </article>`).join("");
+    </article>`).join("") : `<div class="empty">Nenhum modelo encontrado 👟</div>`;
 }
 
 function abrirProduto(i){
-  atual = PRODUTOS[i]; numSel = null;
+  atual = PRODUTOS[i]; corSel = 0;
   $("mMarca").textContent = atual.marca;
   $("mNome").textContent = atual.nome;
   $("mPreco").textContent = brl(atual.preco);
-  $("mAdd").disabled = true;
-  $("mSizes").innerHTML = atual.numeracoes.map(n =>
-    `<button class="size" onclick="selNum(this,${n})">${n}</button>`).join("");
+  $("mCoresBox").style.display = atual.cores.length > 1 ? "block" : "none";
+  mostrarCor();
   $("ovProd").classList.add("show");
+}
+function mostrarCor(){
+  const c = atual.cores[corSel]; numSel = null; $("mAdd").disabled = true;
+  $("mFoto").innerHTML = fotoHTML(c.foto, atual.nome);
+  $("mPreco").textContent = brl(c.preco || atual.preco);
+  $("mCores").innerHTML = atual.cores.map((k,j) => `<button class="sw ${j===corSel?'on':''}" onclick="corSel=${j};mostrarCor()"><i style="background:${k.hex||'#555'}"></i>${k.nome}</button>`).join("");
+  $("mSizes").innerHTML = c.numeracoes.map(n => `<button class="size ${typeof n==='string'?'wide':''}" onclick="selNum(this,'${n}')">${n === "Consultar" ? "Consultar numeração no WhatsApp" : n}</button>`).join("");
 }
 function selNum(el,n){
   numSel = n;
@@ -251,22 +384,22 @@ function selNum(el,n){
   $("mAdd").disabled = false;
 }
 function adicionar(){
-  sacola.push({nome:atual.nome, marca:atual.marca, preco:atual.preco, num:numSel});
+  const c = atual.cores[corSel];
+  sacola.push({ nome: atual.nome, marca: atual.marca, cor: c.nome, preco: c.preco || atual.preco, num: numSel });
   $("count").textContent = sacola.length; fechar("ovProd");
-  $("toast").classList.add("show");
-  setTimeout(()=>$("toast").classList.remove("show"),1800);
+  $("toast").classList.add("show"); setTimeout(()=>$("toast").classList.remove("show"),1800);
 }
 
 function abrirSacola(){
+  $("cErr").textContent = "";
   if(!sacola.length){ $("cItens").innerHTML = `<div class="empty">Sua sacola está vazia 👟</div>`; $("cFinal").style.display="none"; }
   else{
     $("cFinal").style.display="block";
     $("cItens").innerHTML = sacola.map((s,i)=>`
-      <div class="item"><div><strong>${s.nome}</strong><br><small>${s.marca} · Nº ${s.num}</small></div>
+      <div class="item"><div><strong>${s.nome}</strong><br><small>${s.cor ? s.cor+" · " : ""}Nº ${s.num}</small></div>
       <div style="text-align:right">${brl(s.preco)}<br><button class="rm" onclick="remover(${i})">remover</button></div></div>`).join("");
     $("cTotal").textContent = brl(sacola.reduce((a,s)=>a+s.preco,0));
-    $("cPays").innerHTML = LOJA.pagamentos.map(p =>
-      `<button class="pay ${p===pagSel?'on':''}" onclick="pagSel='${p}';abrirSacola()">${p}</button>`).join("");
+    $("cPays").innerHTML = LOJA.pagamentos.map(p => `<button class="pay ${p===pagSel?'on':''}" onclick="pagSel='${p}';abrirSacola()">${p}</button>`).join("");
   }
   $("ovCart").classList.add("show");
 }
@@ -275,10 +408,10 @@ function fechar(id){ $(id).classList.remove("show"); }
 
 function enviar(){
   const nome = $("cNome").value.trim(), obs = $("cObs").value.trim();
-  if(!pagSel){ alert("Escolha a forma de pagamento."); return; }
-  if(!nome){ alert("Digite seu nome."); return; }
+  if(!pagSel){ $("cErr").textContent = "Escolha a forma de pagamento."; return; }
+  if(!nome){ $("cErr").textContent = "Digite seu nome."; $("cNome").focus(); return; }
   let msg = `*NOVO PEDIDO - ${LOJA.nome}*\n\n*Cliente:* ${nome}\n\n`;
-  sacola.forEach((s,i)=>{ msg += `${i+1}. ${s.nome} (${s.marca})\n   Numeração: ${s.num} | ${brl(s.preco)}\n`; });
+  sacola.forEach((s,i)=>{ msg += `${i+1}. ${s.nome}${s.cor ? " - "+s.cor : ""}\n   Numeração: ${s.num} | ${brl(s.preco)}\n`; });
   msg += `\n*Total:* ${brl(sacola.reduce((a,s)=>a+s.preco,0))}\n*Pagamento:* ${pagSel}`;
   if(obs) msg += `\n*Obs:* ${obs}`;
   window.open(`https://wa.me/${LOJA.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
