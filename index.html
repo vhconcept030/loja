@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loja de Tênis</title>
+<title>VH Concept</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script>
 /* =========================================================
    CONFIGURAÇÃO DA LOJA — EDITE SÓ ESTA PARTE
    ========================================================= */
 const LOJA = {
-  nome: "SNEAKER STORE",                 // Nome da loja
-  slogan: "Seu próximo passo começa aqui",
-  logo: "",                              // Ex: "logo.png" (suba o arquivo junto). Vazio = mostra o nome
+  nome: "VH CONCEPT",
+  slogan: "Os tênis mais brabos, direto pro seu pé",
+  logo: "logo.png",                      // Suba a logo no GitHub com esse nome: logo.png
   whatsapp: "5518999999999",             // 55 + DDD + número, só números
   cidade: "Dracena - SP",
   pagamentos: ["Pix", "Cartão de crédito", "Cartão de débito", "Dinheiro"]
@@ -22,105 +22,141 @@ const LOJA = {
 /* Cada tênis: nome, marca, preco, foto (link ou arquivo), numeracoes disponíveis.
    Para tirar um número de estoque, é só apagar ele da lista. */
 const PRODUTOS = [
-  { nome: "Air Runner Pro",   marca: "Marca A", preco: 399.90, foto: "", numeracoes: [37,38,39,40,41,42,43] },
-  { nome: "Street Classic",   marca: "Marca B", preco: 289.90, foto: "", numeracoes: [34,35,36,37,38,39] },
-  { nome: "Urban Flex",       marca: "Marca C", preco: 349.90, foto: "", numeracoes: [38,39,40,41,42] },
-  { nome: "Court Retro",      marca: "Marca A", preco: 459.90, foto: "", numeracoes: [39,40,41,42,43,44] },
-  { nome: "Daily Comfort",    marca: "Marca D", preco: 199.90, foto: "", numeracoes: [33,34,35,36,37,38,39,40] },
-  { nome: "Trail Max",        marca: "Marca B", preco: 529.90, foto: "", numeracoes: [40,41,42,43] }
+  { nome: "Modelo Exemplo 1", marca: "Marca A", preco: 399.90, foto: "", numeracoes: [37,38,39,40,41,42,43] },
+  { nome: "Modelo Exemplo 2", marca: "Marca B", preco: 289.90, foto: "", numeracoes: [34,35,36,37,38,39] },
+  { nome: "Modelo Exemplo 3", marca: "Marca C", preco: 349.90, foto: "", numeracoes: [38,39,40,41,42] },
+  { nome: "Modelo Exemplo 4", marca: "Marca A", preco: 459.90, foto: "", numeracoes: [39,40,41,42,43,44] },
+  { nome: "Modelo Exemplo 5", marca: "Marca D", preco: 199.90, foto: "", numeracoes: [33,34,35,36,37,38,39,40] },
+  { nome: "Modelo Exemplo 6", marca: "Marca B", preco: 529.90, foto: "", numeracoes: [40,41,42,43] }
 ];
 /* ========================================================= */
 </script>
 <style>
   :root{
-    --bg:#0e0e10; --card:#18181c; --line:#2a2a30; --text:#f4f4f5; --muted:#a1a1aa;
-    --accent:#ff5a1f; --accent2:#ffb800; --ok:#22c55e; --wa:#25d366;
+    --bg:#03050c; --card:#0a0f1f; --card2:#0d1530; --line:#1a2547;
+    --text:#f1f4ff; --muted:#8f9bc0;
+    --blue:#1f6bff; --neon:#3d9bff; --glow:rgba(45,130,255,.55);
+    --chrome:linear-gradient(180deg,#ffffff 0%,#d9dee8 35%,#8a93a6 50%,#e9edf5 62%,#b8c0cf 100%);
+    --wa:#25d366;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.5}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font-family:Inter,system-ui,sans-serif;line-height:1.5;overflow-x:hidden}
+  body::before{content:"";position:fixed;inset:0;z-index:-1;
+    background:
+      radial-gradient(ellipse 60% 40% at 50% 0%,rgba(31,107,255,.25),transparent 70%),
+      radial-gradient(ellipse 40% 30% at 100% 60%,rgba(31,107,255,.12),transparent 70%),
+      radial-gradient(ellipse 40% 30% at 0% 90%,rgba(31,107,255,.12),transparent 70%);}
   button{font-family:inherit;cursor:pointer}
-  header{position:sticky;top:0;z-index:20;background:rgba(14,14,16,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  .bar{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:14px 16px}
-  .brand{display:flex;align-items:center;gap:10px;font-family:"Archivo Black",sans-serif;font-size:1.25rem;letter-spacing:.5px}
-  .brand img{height:42px;width:auto}
-  .cart-btn{position:relative;background:var(--accent);color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:700;display:flex;gap:8px;align-items:center}
-  .badge{background:#fff;color:var(--accent);border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.8rem}
-  .hero{max-width:1150px;margin:auto;padding:56px 16px 36px;text-align:center}
-  .hero h1{font-family:"Archivo Black",sans-serif;font-size:clamp(2rem,6vw,3.8rem);line-height:1.05;text-transform:uppercase}
-  .hero h1 span{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
-  .hero p{color:var(--muted);margin-top:12px;font-size:1.05rem}
-  .perks{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:22px}
-  .perks div{border:1px solid var(--line);border-radius:999px;padding:7px 14px;font-size:.88rem;color:var(--muted)}
+  .chrome{background:var(--chrome);-webkit-background-clip:text;background-clip:text;color:transparent;
+    filter:drop-shadow(0 0 1px #000) drop-shadow(0 3px 0 #0b1a4a) drop-shadow(0 0 18px var(--glow))}
+
+  /* Cabeçalho */
+  header{position:sticky;top:0;z-index:20;background:rgba(3,5,12,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);box-shadow:0 1px 20px rgba(31,107,255,.15)}
+  .bar{max-width:1150px;margin:auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .brand img{height:46px;width:46px;border-radius:50%;object-fit:cover;border:2px solid var(--neon);box-shadow:0 0 14px var(--glow)}
+  .brand span{font-family:"Russo One",sans-serif;font-size:1.3rem;font-style:italic;letter-spacing:1px}
+  .cart-btn{background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;border:0;border-radius:999px;padding:10px 18px;font-weight:800;display:flex;gap:8px;align-items:center;box-shadow:0 0 18px var(--glow)}
+  .badge{background:#fff;color:var(--blue);border-radius:999px;min-width:22px;height:22px;display:grid;place-items:center;font-size:.8rem}
+
+  /* Hero */
+  .hero{position:relative;max-width:1150px;margin:auto;padding:40px 16px 30px;text-align:center}
+  .logo-ring{position:relative;width:min(300px,72vw);aspect-ratio:1;margin:0 auto 10px;border-radius:50%;
+    padding:6px;background:conic-gradient(from 0deg,var(--neon),#0b1a4a,#cfd6e4,#0b1a4a,var(--neon));
+    box-shadow:0 0 40px var(--glow),0 0 90px rgba(31,107,255,.35);animation:pulse 3s ease-in-out infinite}
+  .logo-ring img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;background:#000}
+  @keyframes pulse{50%{box-shadow:0 0 60px var(--glow),0 0 120px rgba(31,107,255,.5)}}
+  .streak{position:absolute;height:3px;width:40%;background:linear-gradient(90deg,transparent,var(--neon),transparent);filter:drop-shadow(0 0 6px var(--neon));transform:skewY(-18deg)}
+  .s1{top:28%;left:-5%}.s2{top:58%;right:-5%}
+  .crown{width:64px;margin:0 auto -6px;display:block;filter:drop-shadow(0 0 10px var(--glow))}
+  .hero h1{font-family:"Russo One",sans-serif;font-style:italic;font-size:clamp(2.6rem,10vw,5.5rem);line-height:.95;text-transform:uppercase;letter-spacing:2px}
+  .hero h1 small{display:block;font-size:.55em;letter-spacing:4px}
+  .hero p{color:var(--muted);margin-top:14px;font-size:1.05rem}
+  .cta{display:inline-block;margin-top:22px;background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;text-decoration:none;font-weight:800;padding:14px 30px;border-radius:999px;box-shadow:0 0 24px var(--glow);text-transform:uppercase;letter-spacing:1px}
+  .perks{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px}
+  .perks div{border:1px solid var(--line);background:rgba(13,21,48,.6);border-radius:999px;padding:7px 14px;font-size:.88rem;color:#c7d1f0}
+
+  /* Vitrine */
+  .title{max-width:1150px;margin:20px auto 14px;padding:0 16px;font-family:"Russo One",sans-serif;font-style:italic;font-size:1.7rem;text-transform:uppercase}
   .filters{max-width:1150px;margin:auto;padding:0 16px 18px;display:flex;gap:8px;overflow-x:auto}
-  .chip{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 16px;white-space:nowrap;font-weight:500}
-  .chip.on{background:var(--text);color:var(--bg)}
-  .grid{max-width:1150px;margin:auto;padding:0 16px 60px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
-  .card:hover{transform:translateY(-4px);border-color:var(--accent)}
-  .ph{aspect-ratio:1/1;background:radial-gradient(circle at 50% 60%,#2b2b33,#141417);display:grid;place-items:center;overflow:hidden}
+  .chip{background:var(--card);border:1px solid var(--line);color:var(--text);border-radius:999px;padding:8px 16px;white-space:nowrap;font-weight:600}
+  .chip.on{background:linear-gradient(180deg,var(--neon),var(--blue));border-color:var(--neon);box-shadow:0 0 12px var(--glow)}
+  .grid{max-width:1150px;margin:auto;padding:0 16px 70px;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+  .card{background:linear-gradient(180deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column;transition:transform .25s,border-color .25s,box-shadow .25s}
+  .card:hover{transform:translateY(-5px);border-color:var(--neon);box-shadow:0 0 26px rgba(31,107,255,.4)}
+  .ph{aspect-ratio:1/1;background:radial-gradient(circle at 50% 65%,rgba(31,107,255,.35),#050914 70%);display:grid;place-items:center;overflow:hidden}
   .ph img{width:100%;height:100%;object-fit:cover}
-  .ph .emoji{font-size:5rem;filter:drop-shadow(0 10px 18px rgba(0,0,0,.5));transform:rotate(-12deg)}
+  .ph .emoji{font-size:5rem;filter:drop-shadow(0 0 18px var(--neon));transform:rotate(-14deg)}
   .info{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
-  .marca{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:1px}
-  .nome{font-weight:700;font-size:1.08rem}
-  .preco{font-size:1.3rem;font-weight:800;color:var(--accent2)}
-  .parc{color:var(--muted);font-size:.82rem}
-  .card button{margin-top:auto;background:var(--text);color:var(--bg);border:0;border-radius:12px;padding:12px;font-weight:700}
-  .card button:hover{background:var(--accent);color:#fff}
-  /* modal */
-  .ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;z-index:50;align-items:flex-end;justify-content:center}
+  .marca{color:var(--neon);font-size:.78rem;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
+  .nome{font-weight:800;font-size:1.08rem}
+  .preco{font-family:"Russo One",sans-serif;font-size:1.4rem}
+  .nums{color:var(--muted);font-size:.82rem}
+  .card button{margin-top:auto;background:var(--chrome);color:#06102a;border:0;border-radius:12px;padding:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+  .card button:hover{background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff}
+
+  /* Modais */
+  .ov{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;z-index:50;align-items:flex-end;justify-content:center}
   .ov.show{display:flex}
-  .sheet{background:var(--card);width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:22px 18px 26px;border:1px solid var(--line)}
+  .sheet{background:linear-gradient(180deg,var(--card2),var(--card));width:100%;max-width:520px;max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:22px 18px 26px;border:1px solid var(--neon);box-shadow:0 0 40px rgba(31,107,255,.35)}
   @media(min-width:640px){.ov{align-items:center}.sheet{border-radius:22px}}
-  .sheet h2{font-family:"Archivo Black",sans-serif;font-size:1.35rem;margin-bottom:4px}
-  .close{float:right;background:none;border:0;color:var(--muted);font-size:1.6rem;line-height:1}
-  .lbl{font-weight:600;margin:18px 0 8px;font-size:.95rem}
+  .sheet h2{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.4rem;margin-bottom:4px}
+  .close{float:right;background:none;border:0;color:var(--muted);font-size:1.7rem;line-height:1}
+  .lbl{font-weight:700;margin:18px 0 8px;font-size:.95rem}
   .sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px}
-  .size{background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:11px 0;font-weight:700}
-  .size.on{background:var(--accent);border-color:var(--accent);color:#fff}
-  .primary{width:100%;margin-top:20px;background:var(--accent);color:#fff;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:1rem}
-  .primary:disabled{opacity:.4;cursor:not-allowed}
-  .wa{background:var(--wa)}
+  .size{background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:11px 0;font-weight:800}
+  .size.on{background:linear-gradient(180deg,var(--neon),var(--blue));border-color:var(--neon);box-shadow:0 0 12px var(--glow)}
+  .primary{width:100%;margin-top:20px;background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;border:0;border-radius:14px;padding:15px;font-weight:800;font-size:1rem;text-transform:uppercase;box-shadow:0 0 18px var(--glow)}
+  .primary:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+  .wa{background:var(--wa);box-shadow:0 0 18px rgba(37,211,102,.4)}
   .item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}
   .item small{color:var(--muted)}
   .rm{background:none;border:0;color:#f87171;font-size:.85rem}
-  .total{display:flex;justify-content:space-between;font-size:1.15rem;font-weight:800;margin-top:14px}
+  .total{display:flex;justify-content:space-between;font-size:1.2rem;font-weight:800;margin-top:14px}
   .pays{display:grid;grid-template-columns:1fr 1fr;gap:8px}
   .pay{background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:11px;font-weight:600;font-size:.9rem}
-  .pay.on{border-color:var(--accent);background:rgba(255,90,31,.12)}
-  input,textarea{width:100%;background:var(--bg);border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:12px;font-family:inherit;font-size:.95rem;margin-bottom:8px}
-  input:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  .pay.on{border-color:var(--neon);background:rgba(31,107,255,.18);box-shadow:0 0 10px var(--glow)}
+  input,textarea{width:100%;background:#050914;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:12px;font-family:inherit;font-size:.95rem;margin-bottom:8px}
+  input:focus,textarea:focus{outline:none;border-color:var(--neon)}
   .empty{color:var(--muted);text-align:center;padding:30px 0}
-  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--ok);color:#fff;padding:12px 20px;border-radius:999px;font-weight:700;transition:transform .3s;z-index:60}
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:linear-gradient(180deg,var(--neon),var(--blue));color:#fff;padding:12px 22px;border-radius:999px;font-weight:800;transition:transform .3s;z-index:60;box-shadow:0 0 20px var(--glow)}
   .toast.show{transform:translateX(-50%) translateY(0)}
-  footer{border-top:1px solid var(--line);text-align:center;padding:26px 16px;color:var(--muted);font-size:.88rem}
-  .fab{position:fixed;right:18px;bottom:18px;background:var(--wa);color:#fff;width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:1.6rem;text-decoration:none;box-shadow:0 8px 24px rgba(0,0,0,.4);z-index:15}
+  footer{border-top:1px solid var(--line);text-align:center;padding:28px 16px 90px;color:var(--muted);font-size:.88rem}
+  footer strong{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.2rem}
+  .fab{position:fixed;right:18px;bottom:18px;background:var(--wa);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:15}
+  .fab svg{width:30px;height:30px;fill:#fff}
 </style>
 </head>
 <body>
 
 <header>
   <div class="bar">
-    <div class="brand" id="brand"></div>
+    <a class="brand" href="#" id="brand"></a>
     <button class="cart-btn" onclick="abrirSacola()">🛍️ Sacola <span class="badge" id="count">0</span></button>
   </div>
 </header>
 
 <section class="hero">
-  <h1>Estilo que <span>anda com você</span></h1>
+  <div class="streak s1"></div><div class="streak s2"></div>
+  <div class="logo-ring" id="logoRing"><img id="logoBig" alt=""></div>
+  <svg class="crown" viewBox="0 0 64 40"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#8a93a6"/><stop offset="1" stop-color="#e9edf5"/></linearGradient></defs><path d="M4 34 L8 10 L20 22 L32 4 L44 22 L56 10 L60 34 Z" fill="url(#cg)" stroke="#0b1a4a" stroke-width="2"/><rect x="4" y="33" width="56" height="5" rx="2" fill="url(#cg)" stroke="#0b1a4a" stroke-width="1.5"/></svg>
+  <h1 class="chrome" id="heroNome"></h1>
   <p id="slogan"></p>
+  <a class="cta" href="#vitrine">Ver modelos</a>
   <div class="perks">
-    <div>✅ Pedido rápido pelo WhatsApp</div>
+    <div>⚡ Pedido rápido pelo WhatsApp</div>
     <div>📦 Pronta entrega</div>
     <div>💳 Várias formas de pagamento</div>
   </div>
 </section>
 
+<h2 class="title chrome" id="vitrine">Modelos</h2>
 <div class="filters" id="filters"></div>
 <main class="grid" id="grid"></main>
 
 <footer id="footer"></footer>
-<a class="fab" id="fab" target="_blank" aria-label="WhatsApp">💬</a>
+<a class="fab" id="fab" target="_blank" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.6-.3z"/></svg></a>
 
 <!-- Modal: escolher numeração -->
 <div class="ov" id="ovProd" onclick="if(event.target===this)fechar('ovProd')">
@@ -128,7 +164,7 @@ const PRODUTOS = [
     <button class="close" onclick="fechar('ovProd')">×</button>
     <div class="marca" id="mMarca"></div>
     <h2 id="mNome"></h2>
-    <div class="preco" id="mPreco"></div>
+    <div class="preco chrome" id="mPreco"></div>
     <div class="lbl">Escolha a numeração</div>
     <div class="sizes" id="mSizes"></div>
     <button class="primary" id="mAdd" disabled onclick="adicionar()">Adicionar à sacola</button>
@@ -148,42 +184,51 @@ const PRODUTOS = [
       <div class="lbl">Seus dados</div>
       <input id="cNome" placeholder="Seu nome *">
       <textarea id="cObs" rows="2" placeholder="Endereço ou observação (opcional)"></textarea>
-      <button class="primary wa" id="cEnviar" onclick="enviar()">Enviar pedido pelo WhatsApp</button>
+      <button class="primary wa" onclick="enviar()">Enviar pedido pelo WhatsApp</button>
     </div>
   </div>
 </div>
 
-<div class="toast" id="toast">Adicionado à sacola!</div>
+<div class="toast" id="toast">Adicionado à sacola! ⚡</div>
 
 <script>
 const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
 let sacola = [], atual = null, numSel = null, pagSel = null, filtro = "Todos";
+const $ = id => document.getElementById(id);
 
-// Cabeçalho, rodapé e textos
+// Marca, logo e textos
 document.title = LOJA.nome;
-document.getElementById("brand").innerHTML = LOJA.logo ? `<img src="${LOJA.logo}" alt="${LOJA.nome}">` : LOJA.nome;
-document.getElementById("slogan").textContent = LOJA.slogan;
-document.getElementById("footer").innerHTML = `<strong>${LOJA.nome}</strong><br>${LOJA.cidade}`;
-document.getElementById("fab").href = `https://wa.me/${LOJA.whatsapp}`;
+const partes = LOJA.nome.split(" ");
+$("heroNome").innerHTML = partes.length > 1 ? `${partes[0]}<small>${partes.slice(1).join(" ")}</small>` : LOJA.nome;
+$("slogan").textContent = LOJA.slogan;
+$("footer").innerHTML = `<strong class="chrome">${LOJA.nome}</strong><br>${LOJA.cidade}`;
+$("fab").href = `https://wa.me/${LOJA.whatsapp}`;
 
-// Filtros por marca
+const nomeTexto = `<span class="chrome">${LOJA.nome}</span>`;
+if (LOJA.logo) {
+  $("brand").innerHTML = `<img src="${LOJA.logo}" alt="${LOJA.nome}" onerror="this.remove()">${nomeTexto}`;
+  $("logoBig").src = LOJA.logo; $("logoBig").alt = LOJA.nome;
+  $("logoBig").onerror = () => $("logoRing").style.display = "none";
+} else {
+  $("brand").innerHTML = nomeTexto; $("logoRing").style.display = "none";
+}
+
 function desenharFiltros(){
   const marcas = ["Todos", ...new Set(PRODUTOS.map(p=>p.marca))];
-  document.getElementById("filters").innerHTML = marcas.map(m =>
+  $("filters").innerHTML = marcas.map(m =>
     `<button class="chip ${m===filtro?'on':''}" onclick="filtro='${m}';desenharFiltros();desenharGrade()">${m}</button>`).join("");
 }
 
-// Vitrine
 function desenharGrade(){
   const lista = PRODUTOS.map((p,i)=>({...p,i})).filter(p=>filtro==="Todos"||p.marca===filtro);
-  document.getElementById("grid").innerHTML = lista.map(p => `
+  $("grid").innerHTML = lista.map(p => `
     <article class="card">
       <div class="ph">${p.foto ? `<img src="${p.foto}" alt="${p.nome}" loading="lazy">` : `<span class="emoji">👟</span>`}</div>
       <div class="info">
         <div class="marca">${p.marca}</div>
         <div class="nome">${p.nome}</div>
-        <div class="preco">${brl(p.preco)}</div>
-        <div class="parc">Números: ${p.numeracoes[0]} ao ${p.numeracoes[p.numeracoes.length-1]}</div>
+        <div class="preco chrome">${brl(p.preco)}</div>
+        <div class="nums">Numeração: ${p.numeracoes[0]} ao ${p.numeracoes[p.numeracoes.length-1]}</div>
         <button onclick="abrirProduto(${p.i})">Escolher numeração</button>
       </div>
     </article>`).join("");
@@ -191,48 +236,45 @@ function desenharGrade(){
 
 function abrirProduto(i){
   atual = PRODUTOS[i]; numSel = null;
-  document.getElementById("mMarca").textContent = atual.marca;
-  document.getElementById("mNome").textContent = atual.nome;
-  document.getElementById("mPreco").textContent = brl(atual.preco);
-  document.getElementById("mAdd").disabled = true;
-  document.getElementById("mSizes").innerHTML = atual.numeracoes.map(n =>
+  $("mMarca").textContent = atual.marca;
+  $("mNome").textContent = atual.nome;
+  $("mPreco").textContent = brl(atual.preco);
+  $("mAdd").disabled = true;
+  $("mSizes").innerHTML = atual.numeracoes.map(n =>
     `<button class="size" onclick="selNum(this,${n})">${n}</button>`).join("");
-  document.getElementById("ovProd").classList.add("show");
+  $("ovProd").classList.add("show");
 }
 function selNum(el,n){
   numSel = n;
   document.querySelectorAll(".size").forEach(b=>b.classList.remove("on"));
   el.classList.add("on");
-  document.getElementById("mAdd").disabled = false;
+  $("mAdd").disabled = false;
 }
 function adicionar(){
   sacola.push({nome:atual.nome, marca:atual.marca, preco:atual.preco, num:numSel});
-  atualizarContador(); fechar("ovProd");
-  const t = document.getElementById("toast"); t.classList.add("show");
-  setTimeout(()=>t.classList.remove("show"),1800);
+  $("count").textContent = sacola.length; fechar("ovProd");
+  $("toast").classList.add("show");
+  setTimeout(()=>$("toast").classList.remove("show"),1800);
 }
-function atualizarContador(){ document.getElementById("count").textContent = sacola.length; }
 
 function abrirSacola(){
-  const itens = document.getElementById("cItens"), fin = document.getElementById("cFinal");
-  if(!sacola.length){ itens.innerHTML = `<div class="empty">Sua sacola está vazia 👟</div>`; fin.style.display="none"; }
+  if(!sacola.length){ $("cItens").innerHTML = `<div class="empty">Sua sacola está vazia 👟</div>`; $("cFinal").style.display="none"; }
   else{
-    fin.style.display="block";
-    itens.innerHTML = sacola.map((s,i)=>`
+    $("cFinal").style.display="block";
+    $("cItens").innerHTML = sacola.map((s,i)=>`
       <div class="item"><div><strong>${s.nome}</strong><br><small>${s.marca} · Nº ${s.num}</small></div>
       <div style="text-align:right">${brl(s.preco)}<br><button class="rm" onclick="remover(${i})">remover</button></div></div>`).join("");
-    document.getElementById("cTotal").textContent = brl(sacola.reduce((a,s)=>a+s.preco,0));
-    document.getElementById("cPays").innerHTML = LOJA.pagamentos.map(p =>
+    $("cTotal").textContent = brl(sacola.reduce((a,s)=>a+s.preco,0));
+    $("cPays").innerHTML = LOJA.pagamentos.map(p =>
       `<button class="pay ${p===pagSel?'on':''}" onclick="pagSel='${p}';abrirSacola()">${p}</button>`).join("");
   }
-  document.getElementById("ovCart").classList.add("show");
+  $("ovCart").classList.add("show");
 }
-function remover(i){ sacola.splice(i,1); atualizarContador(); abrirSacola(); }
-function fechar(id){ document.getElementById(id).classList.remove("show"); }
+function remover(i){ sacola.splice(i,1); $("count").textContent = sacola.length; abrirSacola(); }
+function fechar(id){ $(id).classList.remove("show"); }
 
 function enviar(){
-  const nome = document.getElementById("cNome").value.trim();
-  const obs = document.getElementById("cObs").value.trim();
+  const nome = $("cNome").value.trim(), obs = $("cObs").value.trim();
   if(!pagSel){ alert("Escolha a forma de pagamento."); return; }
   if(!nome){ alert("Digite seu nome."); return; }
   let msg = `*NOVO PEDIDO - ${LOJA.nome}*\n\n*Cliente:* ${nome}\n\n`;
