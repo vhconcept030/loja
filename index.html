@@ -64,7 +64,8 @@ const PRODUTOS = [
   { id:"dunk-glitter",      nome:"Nike Dunk Glitter",            marca:"Nike", preco:190, numeracoes:BAIXA },
   { id:"twist",             nome:"Nike Twist",                   marca:"Nike", preco:190, numeracoes:TUDO },
   { id:"shox",              nome:"Nike Shox",                    marca:"Nike", preco:190, numeracoes:TUDO },
-  { id:"jordan-4",          nome:"Nike Jordan 4",                marca:"Nike", preco:200, numeracoes:TUDO },
+  { id:"jordan-4",          nome:"Nike Jordan (grade baixa e alta)", marca:"Nike", preco:200, numeracoes:TUDO },
+  { id:"jordan-4-alta",     nome:"Nike Jordan 4",                marca:"Nike", preco:190, numeracoes:ALTA39 },
   { id:"air-jordan",        nome:"Nike Air Jordan",              marca:"Nike", preco:190, numeracoes:ALTA39 },
   { id:"air-max-tl",        nome:"Nike Air Max TL Lançamento",   marca:"Nike", preco:190, numeracoes:ALTA39 },
   { id:"air-max-excee",     nome:"Nike Air Max Excee",           marca:"Nike", preco:190, numeracoes:ALTA },
@@ -116,8 +117,10 @@ const PRODUTOS = [
   { id:"cavarela",          nome:"Cavarela Numeração Especial",  marca:"Cavarela", preco:200, numeracoes:[44,45,46] },
 
   // ---------- INFANTIL ----------
-  { id:"infantil",          nome:"Linha Infantil",               marca:"Infantil", preco:120, numeracoes:["Consultar"] }
+  { id:"infantil",          nome:"Linha Infantil",               marca:"Infantil", preco:120, numeracoes:r(18,33) }
 ];
+// Quantidade de fotos editadas de cada produto (fotos/<id>-1.jpg, -2.jpg ...)
+const FOTOS = {"af-nobuck":3,"vans-vr3":2,"oakley-flak":3,"lacoste-tclip":4,"adizero-evo":2,"tn-luxo":3,"vomero-18":6,"lacoste-europa":3,"ultraboost":10,"nb-running":4,"puma-180":4,"sb-plataforma":4,"af-premium":4,"af-nobuck-premium":2,"samba-luxo":5,"slip-on":3,"sb-borough":4,"on-cloud":4,"nb-9060":12,"lv-skate":6,"puma-velcro":2,"puma-motorsport":15,"vans-old-skool":2,"superstar":9,"zoom":10,"vans-knu":10,"puma-park":7,"all-star":4,"dunk":7,"lv-tenis":7,"samba-importado":11,"vans-vr3-neo":5,"rivalry":5,"hugo-boss":6,"af-especial":8,"cavarela":5,"af-one":26,"twist":2,"nb-1080":4,"shox":9,"asics-importado":8,"court-borough":6,"campus":5,"lv-classico":5,"tesla":4,"jordan-4-alta":7,"tn-importado":10,"jordan-4":3,"balmain":2,"gucci":2,"mcqueen-importado":3,"gazelle":2,"dunk-luxo":2,"nb-9060-importado":2,"af-lancamento":11,"adizero":4,"dunk-glitter":4,"air-max-tl":3,"mizuno-space":3,"nb-casual":4,"miu-miu":4,"infantil":29,"tn-especial":5,"air-jordan":8,"lv-collab":4,"air-max-excee":7,"vomero-premium":5,"nb-9060-r":6,"oakley-halftrack":5,"ous-fluente":6,"ous-refletivo":4,"af-primeira":14,"tesla-laminante":4,"nb-740":9,"mcqueen":5,"vans-eva":4};
 /* ========================================================= */
 </script>
 <style>
@@ -193,14 +196,17 @@ const PRODUTOS = [
   @media(min-width:640px){.ov{align-items:center}.sheet{border-radius:22px}}
   .sheet h2{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.35rem;margin-bottom:2px}
   .close{float:right;background:none;border:0;color:var(--muted);font-size:1.8rem;line-height:1}
-  .mph{aspect-ratio:4/3;border-radius:16px;margin:12px 0 8px;background:radial-gradient(circle at 50% 65%,rgba(31,107,255,.35),#050914 70%);display:grid;place-items:center;overflow:hidden;border:1px solid var(--line)}
+  .mph{aspect-ratio:1/1;border-radius:16px;margin:12px 0 8px;background:radial-gradient(circle at 50% 65%,rgba(31,107,255,.35),#050914 70%);display:grid;place-items:center;overflow:hidden;border:1px solid var(--line)}
   .mph img{width:100%;height:100%;object-fit:cover}
   .mph .emoji{font-size:6rem}
   .lbl{font-weight:700;margin:16px 0 8px;font-size:.95rem}
   .swatches{display:flex;gap:8px;flex-wrap:wrap}
-  .sw{display:flex;align-items:center;gap:8px;background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:999px;padding:5px 13px 5px 5px;font-weight:600;font-size:.86rem}
+  .sw{width:64px;height:64px;padding:0;border:2px solid var(--line);border-radius:12px;overflow:hidden;background:#050914}
+  .sw img{width:100%;height:100%;object-fit:cover;display:block}
   .sw i{width:24px;height:24px;border-radius:50%;border:1px solid #3a4570;display:block}
-  .sw.on{border-color:var(--neon);background:rgba(31,107,255,.18);box-shadow:0 0 10px var(--glow)}
+  .sw.on{border-color:var(--neon);box-shadow:0 0 12px var(--glow);transform:scale(1.06)}
+  .optlbl{color:var(--muted);font-size:.85rem;margin-top:6px}
+  .more{color:var(--neon);font-size:.78rem;font-weight:700}
   .sizes{display:grid;grid-template-columns:repeat(auto-fill,minmax(56px,1fr));gap:8px}
   .size{background:transparent;border:1.5px solid var(--line);color:var(--text);border-radius:10px;padding:11px 0;font-weight:800}
   .size.wide{grid-column:1/-1}
@@ -268,7 +274,7 @@ const PRODUTOS = [
     <h2 id="mNome"></h2>
     <div class="preco chrome" id="mPreco"></div>
     <div class="mph" id="mFoto"></div>
-    <div id="mCoresBox"><div class="lbl">Escolha a cor</div><div class="swatches" id="mCores"></div></div>
+    <div id="mCoresBox"><div class="lbl">Escolha a cor / modelo</div><div class="swatches" id="mCores"></div><div class="optlbl" id="mOpt"></div></div>
     <div class="lbl">Escolha a numeração</div>
     <div class="sizes" id="mSizes"></div>
     <button class="primary" id="mAdd" disabled onclick="adicionar()">Adicionar à sacola</button>
@@ -302,7 +308,11 @@ let sacola = [], atual = null, corSel = 0, numSel = null, pagSel = null, filtro 
 
 // Cada produto tem pelo menos uma "cor"; foto padrão = fotos/<id>.jpg
 PRODUTOS.forEach(p => {
-  if (!p.cores || !p.cores.length) p.cores = [{ nome:"", foto: p.foto || `fotos/${p.id}.jpg`, numeracoes: p.numeracoes }];
+  if (!p.cores || !p.cores.length) {
+    const n = FOTOS[p.id] || 0;
+    p.cores = n ? Array.from({length:n},(_,k)=>({ nome:`Opção ${k+1}`, foto:`fotos/${p.id}-${k+1}.jpg`, numeracoes:p.numeracoes }))
+                : [{ nome:"", foto:"", numeracoes:p.numeracoes }];
+  }
   p.cores.forEach(c => { if (!c.numeracoes) c.numeracoes = p.numeracoes; });
   p.todasNums = [...new Set(p.cores.flatMap(c => c.numeracoes))];
 });
@@ -354,7 +364,7 @@ function desenharGrade(){
         <div class="marca">${p.marca}</div>
         <div class="nome">${p.nome}</div>
         <div class="preco chrome">${brl(p.preco)}</div>
-        ${p.cores.length > 1 ? `<div class="dots">${p.cores.map(c=>`<span class="dot" style="background:${c.hex||'#555'}" title="${c.nome}"></span>`).join("")}</div>` : ""}
+        ${p.cores.length > 1 ? `<div class="more">+ ${p.cores.length} opções de cor</div>` : ""}
         <div class="nums">Numeração: ${faixa(p.todasNums)}</div>
         <button class="go">Escolher</button>
       </div>
@@ -374,7 +384,8 @@ function mostrarCor(){
   const c = atual.cores[corSel]; numSel = null; $("mAdd").disabled = true;
   $("mFoto").innerHTML = fotoHTML(c.foto, atual.nome);
   $("mPreco").textContent = brl(c.preco || atual.preco);
-  $("mCores").innerHTML = atual.cores.map((k,j) => `<button class="sw ${j===corSel?'on':''}" onclick="corSel=${j};mostrarCor()"><i style="background:${k.hex||'#555'}"></i>${k.nome}</button>`).join("");
+  $("mOpt").textContent = atual.cores.length > 1 ? `Selecionado: ${c.nome} de ${atual.cores.length}` : "";
+  $("mCores").innerHTML = atual.cores.map((k,j) => `<button class="sw ${j===corSel?'on':''}" onclick="corSel=${j};mostrarCor()" aria-label="${k.nome}"><img src="${k.foto}" alt="" loading="lazy"></button>`).join("");
   $("mSizes").innerHTML = c.numeracoes.map(n => `<button class="size ${typeof n==='string'?'wide':''}" onclick="selNum(this,'${n}')">${n === "Consultar" ? "Consultar numeração no WhatsApp" : n}</button>`).join("");
 }
 function selNum(el,n){
