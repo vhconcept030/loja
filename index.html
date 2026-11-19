@@ -16,6 +16,7 @@ const LOJA = {
   logo: "logo.png",
   whatsapp: "5518996728098",             // 55 + DDD + número, só números
   cidade: "",
+  creditoLink: "",                       // link do Studio Kairos (Instagram ou site), opcional
   pagamentos: ["Pix", "Cartão de crédito", "Cartão de débito", "Dinheiro"]
 };
 
@@ -235,6 +236,11 @@ const FOTOS = {"af-nobuck":3,"vans-vr3":2,"oakley-flak":3,"lacoste-tclip":4,"adi
   footer strong{font-family:"Russo One",sans-serif;font-style:italic;font-size:1.2rem}
   .fab{position:fixed;right:18px;bottom:18px;background:var(--wa);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:15}
   .fab svg{width:30px;height:30px;fill:#fff}
+  .credit{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;padding-top:16px;border-top:1px solid rgba(127,127,127,.18);font-size:.78rem;color:var(--muted);text-decoration:none}
+  .credit img{height:26px;width:auto;opacity:.9}
+  .credit b{font-weight:700;letter-spacing:.5px}
+  .kr .kr-bg{fill:#F7F5F0}.kr .kr-fg{stroke:#13213C}
+  .krn{font-size:.9rem;letter-spacing:-.01em}.krn span{font-weight:400}.krn b{font-weight:800}
 </style>
 </head>
 <body>
@@ -344,7 +350,7 @@ document.title = LOJA.nome;
 const partes = LOJA.nome.split(" ");
 $("heroNome").innerHTML = partes.length > 1 ? `${partes[0]}<small>${partes.slice(1).join(" ")}</small>` : LOJA.nome;
 $("slogan").textContent = LOJA.slogan;
-$("footer").innerHTML = `<strong class="chrome">${LOJA.nome}</strong>${LOJA.cidade ? "<br>"+LOJA.cidade : ""}`;
+$("footer").innerHTML = `<strong class="chrome">${LOJA.nome}</strong>${LOJA.cidade ? "<br>"+LOJA.cidade : ""}` + `<a class="credit" href="${LOJA.creditoLink || "#"}" target="_blank" rel="noopener">Desenvolvido por <svg class="kr" viewBox="0 0 120 120" width="26" height="26" role="img" aria-label="Studio Kairós"><rect class="kr-bg" width="120" height="120" rx="28"></rect><g class="kr-fg" transform="translate(0 8)" fill="none" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"><path d="M22 42 A12 12 0 0 1 34 30 H86 A12 12 0 0 1 98 42 V70 A12 12 0 0 1 86 82 H34 A12 12 0 0 1 22 70 Z"></path><path d="M42 30 V25 A4 4 0 0 1 46 21 H60 A4 4 0 0 1 64 25 V30"></path><circle cx="62" cy="56" r="14"></circle></g><circle cx="85" cy="52" r="5" fill="#D9A441"></circle><path d="M62 55 V73 M55.5 61 H68.5" fill="none" stroke="#D9A441" stroke-width="4" stroke-linecap="round"></path></svg><span class="krn"><span>Studio</span> <b>Kairós</b></span></a>`;
 $("fab").href = `https://wa.me/${LOJA.whatsapp}`;
 const nomeTexto = `<span class="chrome">${LOJA.nome}</span>`;
 $("brand").innerHTML = `<img src="${LOJA.logo}" alt="" onerror="this.remove()">${nomeTexto}`;
