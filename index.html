@@ -396,7 +396,9 @@ function selNum(el,n){
 }
 function adicionar(){
   const c = atual.cores[corSel];
-  sacola.push({ nome: atual.nome, marca: atual.marca, cor: c.nome, preco: c.preco || atual.preco, num: numSel });
+  const cod = c.foto ? c.foto.replace(/^fotos\//,"").replace(/\.jpg$/,"").toUpperCase() : "";
+  const link = c.foto ? new URL(c.foto, location.href).href : "";
+  sacola.push({ nome: atual.nome, marca: atual.marca, cor: c.nome, preco: c.preco || atual.preco, num: numSel, cod, link });
   $("count").textContent = sacola.length; fechar("ovProd");
   $("toast").classList.add("show"); setTimeout(()=>$("toast").classList.remove("show"),1800);
 }
@@ -407,7 +409,7 @@ function abrirSacola(){
   else{
     $("cFinal").style.display="block";
     $("cItens").innerHTML = sacola.map((s,i)=>`
-      <div class="item"><div><strong>${s.nome}</strong><br><small>${s.cor ? s.cor+" · " : ""}Nº ${s.num}</small></div>
+      <div class="item"><div><strong>${s.nome}</strong><br><small>${s.cod ? "Cód. "+s.cod+" · " : ""}Nº ${s.num}</small></div>
       <div style="text-align:right">${brl(s.preco)}<br><button class="rm" onclick="remover(${i})">remover</button></div></div>`).join("");
     $("cTotal").textContent = brl(sacola.reduce((a,s)=>a+s.preco,0));
     $("cPays").innerHTML = LOJA.pagamentos.map(p => `<button class="pay ${p===pagSel?'on':''}" onclick="pagSel='${p}';abrirSacola()">${p}</button>`).join("");
@@ -422,7 +424,7 @@ function enviar(){
   if(!pagSel){ $("cErr").textContent = "Escolha a forma de pagamento."; return; }
   if(!nome){ $("cErr").textContent = "Digite seu nome."; $("cNome").focus(); return; }
   let msg = `*NOVO PEDIDO - ${LOJA.nome}*\n\n*Cliente:* ${nome}\n\n`;
-  sacola.forEach((s,i)=>{ msg += `${i+1}. ${s.nome}${s.cor ? " - "+s.cor : ""}\n   Numeração: ${s.num} | ${brl(s.preco)}\n`; });
+  sacola.forEach((s,i)=>{ msg += `${i+1}. ${s.nome}${s.cor ? " - "+s.cor : ""}\n   Código: ${s.cod || "-"}\n   Numeração: ${s.num} | ${brl(s.preco)}\n${s.link ? "   Foto: "+s.link+"\n" : ""}`; });
   msg += `\n*Total:* ${brl(sacola.reduce((a,s)=>a+s.preco,0))}\n*Pagamento:* ${pagSel}`;
   if(obs) msg += `\n*Obs:* ${obs}`;
   window.open(`https://wa.me/${LOJA.whatsapp}?text=${encodeURIComponent(msg)}`, "_blank");
